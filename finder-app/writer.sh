@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 if [ $# -ne 2 ]; then
 echo "bad args"
 exit 1
