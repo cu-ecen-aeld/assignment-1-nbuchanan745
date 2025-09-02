@@ -86,19 +86,19 @@ exit(1);
 }else{
 
 
+int var = 0;
 
-/*if(waitpid(pid,&var,0) == -1){
+if(waitpid(pid,&var,0) == -1){
 
-printf("returning false from wait pid \n");
+//printf("returning false from wait pid \n");
 
 
 return false;
 }
-*/
-int var = 0;
 
-wait(&var);
- 
+
+//wait(&var);
+
 
 if(WIFEXITED(var) == false){
 //printf("returninf false from wifexited   \n");
@@ -171,14 +171,16 @@ if (dup2(fd, 1) < 0) { close(fd); return false; }
 execv(command[0], command);
 exit(1);}else{
 close(fd);
-/*if(waitpid(pid,&var,0) == -1){
-return false;
-}
-*/
 int var = 0;
 
-wait(&var);
-    va_end(args);
+if(waitpid(pid,&var,0) == -1){
+return false;
+}
+
+//int var = 0;
+
+//wait(&var);
+ //   va_end(args);
 
 
 if(WIFEXITED(var) == false){
