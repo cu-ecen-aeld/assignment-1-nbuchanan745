@@ -1,5 +1,10 @@
+#include "stdlib.h"
 #include "systemcalls.h"
-
+#include "sys/wait.h"
+#include "unistd.h"
+#include "sys/stat.h"
+#include "sys/types.h"
+#include "fcntl.h"
 /**
  * @param cmd the command to execute with system()
  * @return true if the command in @param cmd was executed
@@ -16,6 +21,11 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
+
+int ret = 0; 
+ret = system(cmd);
+
+if(ret == 0){return true;}else {return false;}
 
     return true;
 }
@@ -59,6 +69,63 @@ bool do_exec(int count, ...)
  *
 */
 
+
+
+printf("\n\n COMMAND + %s \n ", command[0]);
+
+
+
+
+
+
+int pid = 0;
+int var = 0;
+pid = fork();
+
+printf("PID   %d \n", pid);
+
+if(pid < 0){
+return false;
+}else{
+if(pid == 0){
+
+execv(command[0], command+1);
+
+return false;
+}else{
+
+
+
+/*if(waitpid(pid,&var,0) == -1){
+
+printf("returning false from wait pid \n");
+
+
+return false;
+}
+*/
+wait(&var);
+ 
+
+if(WIFEXITED(var) == false){
+printf("returninf false from wifexited   \n");
+
+return false;
+}else{
+if(WEXITSTATUS(var) == 0){
+printf("returninf true from wifexitstauts \n");
+
+return true;}else{
+printf("returninf false from wifexitstauts \n");
+
+return false;}
+}
+
+}
+}
+
+
+
     va_end(args);
 
     return true;
@@ -92,6 +159,50 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
+
+
+
+int pid = 0;
+int var = 0;
+
+int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
+if(fd < 0){
+return false;
+}
+pid = fork();
+if(pid < 0){
+return false;
+}else{
+if(pid == 0){
+if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
+    close(fd);
+execv(command[0], command+1);
+return false;
+}else{
+close(fd);
+if(waitpid(pid,&var,0) == -1){
+return false;
+}
+
+
+
+
+if(WIFEXITED(var) == false){
+return false;
+}else{
+if(WEXITSTATUS(var) == 0){
+return true;}else{return false;}
+}
+
+
+}
+}
+
+
+
+
+
+
 
     va_end(args);
 
