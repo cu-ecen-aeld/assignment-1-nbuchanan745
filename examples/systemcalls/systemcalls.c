@@ -71,27 +71,18 @@ bool do_exec(int count, ...)
 
 
 
-printf("\n\n COMMAND + %s \n ", command[0]);
-
-
-
-
-
-
 int pid = 0;
-int var = 0;
 pid = fork();
 
-printf("PID   %d \n", pid);
+//printf("PID   %d \n", pid);
 
 if(pid < 0){
 return false;
-}else{
-if(pid == 0){
+}else if(pid == 0){
 
-execv(command[0], command+1);
-
-return false;
+execv(command[0], command);
+exit(1);
+ return false;
 }else{
 
 
@@ -104,31 +95,33 @@ printf("returning false from wait pid \n");
 return false;
 }
 */
+int var = 0;
+
 wait(&var);
  
 
 if(WIFEXITED(var) == false){
-printf("returninf false from wifexited   \n");
+//printf("returninf false from wifexited   \n");
 
 return false;
 }else{
-if(WEXITSTATUS(var) == 0){
-printf("returninf true from wifexitstauts \n");
+if(WEXITSTATUS(var) == 0){//
+///printf("returninf true from wifexitstauts \n");
 
 return true;}else{
-printf("returninf false from wifexitstauts \n");
+//printf("returninf false from wifexitstauts \n");
 
 return false;}
 }
 
 }
-}
+
 
 
 
     va_end(args);
 
-    return true;
+    return false;
 }
 
 /**
@@ -162,8 +155,8 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 
 
 
+
 int pid = 0;
-int var = 0;
 
 int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
 if(fd < 0){
@@ -172,19 +165,20 @@ return false;
 pid = fork();
 if(pid < 0){
 return false;
-}else{
-if(pid == 0){
-if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
+}else if(pid == 0){
+if (dup2(fd, 1) < 0) { close(fd); return false; }
     close(fd);
-execv(command[0], command+1);
-return false;
-}else{
+execv(command[0], command);
+exit(1);}else{
 close(fd);
-if(waitpid(pid,&var,0) == -1){
+/*if(waitpid(pid,&var,0) == -1){
 return false;
 }
+*/
+int var = 0;
 
-
+wait(&var);
+    va_end(args);
 
 
 if(WIFEXITED(var) == false){
@@ -195,7 +189,7 @@ return true;}else{return false;}
 }
 
 
-}
+
 }
 
 
@@ -206,5 +200,5 @@ return true;}else{return false;}
 
     va_end(args);
 
-    return true;
+    return false;
 }
