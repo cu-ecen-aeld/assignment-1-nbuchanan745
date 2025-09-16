@@ -148,9 +148,10 @@ make CROSS_COMPILE=${CROSS_COMPILE}
 cp -r /home/nbuchanan/assignment-1-nbuchanan745/finder-app/ ${OUTDIR}/rootfs/home/
 
 # TODO: Chown the root directory
-sudo chown 777 ${OUTDIR}/rootfs/
+sudo chown -R root:root ${OUTDIR}/rootfs/*
 # TODO: Create initramfs.cpio.gz
 cd ${OUTDIR}/rootfs/
 find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
 cd ..
 gzip -f initramfs.cpio
+ 
