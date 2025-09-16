@@ -16,6 +16,8 @@ jobs:
           - name: Run unit test
             run: ./unit-test.sh
     full-test:
+        permissions:
+          contents: write
         runs-on: self-hosted
         steps:
           - uses: actions/checkout@v2
