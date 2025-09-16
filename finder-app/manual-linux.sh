@@ -2,6 +2,9 @@
 # Script outline to install and build kernel.
 # Author: Siddhant Jajoo.
 
+
+pwd
+
 set -e
 set -u
 
@@ -124,10 +127,10 @@ pwd
 echo "${SYSROOT}"
 echo "${OUTDIR}"
 #cat ${SYSROOT}/lib/ld-linux-aarch64.so.1
-#cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib
-#cp -a ${SYSROOT}/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64
-#cp -a ${SYSROOT}/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64
-#cp -a ${SYSROOT}/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64
+cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib
+cp -a ${SYSROOT}/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64
+cp -a ${SYSROOT}/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64
+cp -a ${SYSROOT}/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64
 
 
 
