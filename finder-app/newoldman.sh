@@ -2,6 +2,13 @@
 # Script outline to install and build kernel.
 # Author: Siddhant Jajoo.
 
+export PATH=/home/crosscompilertoolchain/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin:$PATH
+
+
+
+pwd
+
+
 set -e
 set -u
 
@@ -12,7 +19,8 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
-GCC_ARM_VERSION=13.3.rel1
+SYSROOT=/home/crosscompilertoolchain/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin/../aarch64-none-linux-gnu/libc
+
 
 if [ $# -lt 1 ]
 then
@@ -39,14 +47,30 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     # TODO: Add your kernel build steps here
     sudo apt-get install -y --no-install-recommends bc u-boot-tools kmod cpio flex bison libssl-dev psmisc
     sudo apt-get install -y qemu-system-arm
-    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} mrproper
-    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} defconfig
-    make -j8 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} all
-    make -j8 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
+
+echo "ONE                                                                  11111111111>"
+                make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- mrproper
+
+echo "TWO                                                                  11111111111>"
+
+        make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- defconfig 
+
+echo "THREE                                                                  111111111>"
+
+        make -j4 ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- all
+echo "FOUR                                                                  1111111111>"
+
+#       make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- modules
+
+
+        make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- dtbs 
+
+        echo "FIVE           "
+
 fi
 
 echo "Adding the Image in outdir"
-cp ${OUTDIR}/linux-stable/arch/arm64/boot/Image ${OUTDIR}
+cp -r ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}
 
 echo "Creating the staging directory for the root filesystem"
 cd "$OUTDIR"
@@ -56,11 +80,29 @@ if [ -d "${OUTDIR}/rootfs" ]; then
 fi
 
 # TODO: Create necessary base directories
+
 mkdir -p ${OUTDIR}/rootfs
-cd ${OUTDIR}/rootfs
-mkdir -p bin dev etc home lib lib64 proc sbin sys tmp usr var
-mkdir -p usr/bin usr/lib usr/sbin
-mkdir -p var/log
+mkdir ${OUTDIR}/rootfs/bin
+mkdir ${OUTDIR}/rootfs/dev
+mkdir ${OUTDIR}/rootfs/etc
+mkdir ${OUTDIR}/rootfs/lib
+mkdir ${OUTDIR}/rootfs/lib64 
+mkdir ${OUTDIR}/rootfs/proc
+mkdir ${OUTDIR}/rootfs/sys
+mkdir ${OUTDIR}/rootfs/home
+mkdir ${OUTDIR}/rootfs/sbin
+mkdir ${OUTDIR}/rootfs/tmp
+mkdir ${OUTDIR}/rootfs/usr
+mkdir ${OUTDIR}/rootfs/usr/bin
+mkdir ${OUTDIR}/rootfs/usr/sbin
+mkdir ${OUTDIR}/rootfs/usr/lib 
+mkdir ${OUTDIR}/rootfs/var
+mkdir ${OUTDIR}/rootfs/var/log
+
+
+
+
+
 
 cd "$OUTDIR"
 if [ ! -d "${OUTDIR}/busybox" ]
@@ -76,16 +118,17 @@ else
 fi
 
 # TODO: Make and install busybox
-make -j8 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
-make -j8 CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install 
+make  ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
+make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install 
 
 
 echo "Library dependencies"
-${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpreter"
-${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
+#${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpreter"
+#${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-SYSROOT=$(${CROSS_COMPILE}gcc --print-sysroot)
+
+
 
 cp ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib/
 cp ${SYSROOT}/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64/
@@ -99,11 +142,15 @@ sudo mknod -m 600 ${OUTDIR}/rootfs/dev/null c 1 3
 
 # TODO: Clean and build the writer utility
 cd $FINDER_APP_DIR
-make CROSS_COMPILE=${CROSS_COMPILE} clean && make CROSS_COMPILE=${CROSS_COMPILE}
+
+make clean
+
+make CROSS_COMPILE=${CROSS_COMPILE} 
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
-cp -rL finder-test.sh finder.sh autorun-qemu.sh writer conf ${OUTDIR}/rootfs/home/
+
+cp -r /home/nbuchanan/assignment-1-nbuchanan745/finder-app/ ${OUTDIR}/rootfs/home/
 
 # TODO: Chown the root directory
 sudo chown -R root:root ${OUTDIR}/rootfs/*
