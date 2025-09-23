@@ -1,6 +1,9 @@
 #!/bin/sh
 cd $(dirname $0)
+
+
 echo "Running test script"
+echo "THIS IS M<Y COPY"
 ./finder-test.sh
 rc=$?
 if [ ${rc} -eq 0 ]; then
