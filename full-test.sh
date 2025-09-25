@@ -4,6 +4,8 @@
 # steps described in https://github.com/cu-ecen-5013/assignment-autotest/blob/master/README.md#running-tests
 set -e
 
+export PATH=/home/crosscompilertoolchain/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin:$PATH
+
 
 echo "THIS IS MY COPYYY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
