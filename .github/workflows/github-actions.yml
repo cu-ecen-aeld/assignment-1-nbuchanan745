@@ -7,7 +7,6 @@ on:
             - '*'
 jobs:
     unit-test:
-        container: cuaesd/aesd-autotest:24-unit-test
         runs-on: self-hosted
         steps:
           - name: Run unit test
@@ -20,4 +19,4 @@ jobs:
           - name: Run full test
             run: export PATH=/home/crosscompilertoolchain/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin:$PATH
           - name: Run manual linux
-            run: ./finder-app/manual-linux.sh
+            run: ./home/nbuchanan/assignment-1-nbuchanan745/finder-app/manual-linux.sh
