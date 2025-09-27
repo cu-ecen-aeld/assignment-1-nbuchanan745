@@ -119,7 +119,7 @@ make  ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
 make  CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install 
 
 
-echo "Library dependencies"
+echo "Library dependencies Should"
 #${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpreter"
 #${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
@@ -137,7 +137,7 @@ sudo mknod -m 600 ${OUTDIR}/rootfs/dev/null c 1 3
 
 # TODO: Clean and build the writer utility
 cd $FINDER_APP_DIR
-make clean
+#make clean
 make CROSS_COMPILE=${CROSS_COMPILE}
 
 # TODO: Copy the finder related scripts and executables to the /home directory
