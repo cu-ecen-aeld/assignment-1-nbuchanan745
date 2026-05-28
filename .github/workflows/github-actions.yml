@@ -21,7 +21,7 @@ jobs:
             env:
               FORCE_UNSAFE_CONFIGURE: 1
               GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
-            run: ./full-test.sh
+            run: sudo ./full-test.sh
           - name: Cleanup
             if: always()
             run: |
