@@ -4,6 +4,15 @@
 # steps described in https://github.com/cu-ecen-5013/assignment-autotest/blob/master/README.md#running-tests
 set -e
 
+<<<<<<< HEAD
+export PATH=/home/crosscompilertoolchain/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin:$PATH
+
+
+echo "THIS IS MY COPYYY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+
+=======
+>>>>>>> buildroot-assignments-base/master
 cd `dirname $0`
 test_dir=`pwd`
 echo "starting test with SKIP_BUILD=\"${SKIP_BUILD}\" and DO_VALIDATE=\"${DO_VALIDATE}\""
@@ -20,6 +29,15 @@ echo "Running test with user $(whoami)"
 
 set +e
 
+<<<<<<< HEAD
+./unit-test.sh
+unit_test_rc=$?
+if [ $unit_test_rc -ne 0 ]; then
+    echo "Unit test failed"
+fi
+
+=======
+>>>>>>> buildroot-assignments-base/master
 # If there's a configuration for the assignment number, use this to look for
 # additional tests
 if [ -f conf/assignment.txt ]; then
