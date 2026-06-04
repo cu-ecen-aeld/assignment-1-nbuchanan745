@@ -1,5 +1,6 @@
 #hold
 config BR2_PACKAGE_AESD_ASSIGNMENTS
 	bool "aesd-assignments"
+        source "/home/nbuchanan/assignment-1-nbuchanan745/base_external/package/aesd-assignments/Config.in"
 	help
 	  school package
